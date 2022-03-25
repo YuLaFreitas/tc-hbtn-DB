@@ -11,7 +11,7 @@ public class ConnectionSQLite {
         Connection cnn = null;
 
         try {
-            cnn = DriverManager.getConnection("jdbc:sqlite:sqlite_database2022.db");
+            cnn = DriverManager.getConnection("jdbc:sqlite:sqlitedatabase2022.db");
             System.out.println(cnn);
         }catch (SQLException e){
             System.out.println(e.getMessage());
