@@ -5,7 +5,7 @@ import java.sql.Statement;
 
 public class ClienteDAOImpl implements ClienteDAO{
 
-    String nomeTabela;
+    String nomeTabela = "Cliente";
     @Override
     public Connection connect(String urlConexao) {
         Connection cnn = null;
@@ -13,39 +13,43 @@ public class ClienteDAOImpl implements ClienteDAO{
             cnn = DriverManager.getConnection(urlConexao);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }finally {
+        }/*finally {
             if(cnn != null){
                 try {
                     cnn.close();
                 } catch (SQLException e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Erro conexão " + e.getMessage());
                 }
             }
-        }
+        }*/
         return cnn;
     }
 
     private void scrip(String query, String urlConexao){
         Statement stm = null;
+        Connection cx = connect(urlConexao);
         try {
-            stm = connect(urlConexao).createStatement();
+            stm = cx.createStatement();
             stm.executeQuery(query);
+            System.out.println(">>>>>" +stm.getResultSet().getCursorName());
+            cx.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erro script "+ e.getMessage());
         }
     }
 
     @Override
     public void createTable(String urlConexao) {
         scrip(
-                String.format("create table %s(%s,%s,%s,%s)", nomeTabela, "cpf text", "rg text", "nome text", "idade integer"),
+                String.format("CREATE TABLE IF NOT EXISTS %s (%s,%s,%s,%s,%s);", nomeTabela, "id INTEGER PRIMARY KEY AUTOINCREMENT","cpf TEXT", "rg text", "nome TEXT", "idade INTEGER"),
                 urlConexao);
+
     }
 
     @Override
     public void insert(String url_conexao, Cliente cliente) {
         scrip(
-                String.format("insert into %s values (%s,%s,%s,%d);", nomeTabela ,cliente.getCpf(), cliente.getRg(), cliente.getNome(), cliente.getIdade()),
+                String.format("insert into %s(cpf, rg, nome, idade) values ('%s','%s','%s',%d);", nomeTabela ,cliente.getCpf(), cliente.getRg(), cliente.getNome(), cliente.getIdade()),
                 url_conexao
         );
     }
@@ -57,18 +61,20 @@ public class ClienteDAOImpl implements ClienteDAO{
     }
 
     @Override
-    public void update(String urlConexao, int id, String name, Integer idade) {
-        scrip(
+    public void update(String urlConexao, Integer id, String name, Integer idade) {
+       scrip(
                 String.format(
-                        "update table %s set nome = %s, idade = %d" +
+                        "update %s set nome = '%s', idade = %d" +
                                 " where id == " + id,
                         nomeTabela, name, idade )
                 , urlConexao);
     }
 
     @Override
-    public void delete(String urlConexao, int id) {
+    public void delete(String urlConexao, Integer id) {
         scrip(
                 String.format("delete from %s where id = %s", nomeTabela, id), urlConexao);
+
+
     }
 }

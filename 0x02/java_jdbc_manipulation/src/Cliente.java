@@ -1,7 +1,7 @@
 public class Cliente {
 
     private String nome;
-    private int idade;
+    private Integer idade;
     private String cpf;
     private String RG;
 
@@ -13,11 +13,11 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Integer getIdade() {
+    public int getIdade() {
         return idade;
     }
 
-    public void setIdade(int idade) {
+    public void setIdade(Integer idade) {
         this.idade = idade;
     }
 
