@@ -2,7 +2,7 @@ public class ClienteTest {
 
     public static void main(String[] args) {
 
-        String url = "jdbc:sqlite:database_test_16_03_2022.db";
+        String url = "jdbc:sqlite:sqlite_database_marco_2022.db";
 
         // 1) Criando o banco de dados
         ClienteDAOImpl clienteDAOImpl = new ClienteDAOImpl();
